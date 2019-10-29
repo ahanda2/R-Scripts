@@ -37,15 +37,13 @@ radio_table <- map(urls,
                    ~{read_html(.x) %>% 
                        html_node("table") %>% 
                        html_table() %>% 
-                       tbl_df() 
-                       Sys.sleep(5)})
+                       tbl_df()})
 
 tv_table <- map(urls,
                 ~{read_html(.x) %>%
                     html_node("table") %>%
                     html_table() %>%
-                    tbl_df()
-                    Sys.sleep(5)})
+                    tbl_df()})
 
 
 
@@ -59,3 +57,12 @@ new_tv_table <- map(tv_table,~{.x %>% select(-Link)})
 
 final_radio_data <- bind_rows(new_table)
 final_tv_data <- bind_rows(new_table)
+
+#Exports the R data object so it can be used within the package
+
+usethis::use_data(final_radio_data,
+                  overwrite = TRUE)
+usethis::use_data(final_tv_data,
+                  overwrite = TRUE)
+
+
