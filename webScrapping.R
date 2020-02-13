@@ -65,4 +65,29 @@ usethis::use_data(final_radio_data,
 usethis::use_data(final_tv_data,
                   overwrite = TRUE)
 
+#######################################################
+
+library(rvest)
+library(tidyverse)
+
+list_tvs <- read_html("https://en.wikipedia.org/wiki/List_of_United_States_television_markets")
+
+tvs_df <- list_tvs %>%
+  html_node(xpath = '//*[@id="mw-content-text"]/div/table') %>%
+  html_table( fill = TRUE) 
+
+test <- tvs_df[-c(2,3,4)]
+
+tvs_df <- tvs_df[-c(2)]
+
+col_names <- colnames(tvs_df)
+
+col_names <- col_names[ !is.na(col_names)]
+
+tvs_df <- select(tvs_df,!!col_names)
+
+
+write_csv(tvs_df, path = "J:/Research/TVData.csv")
+
+write_excel_csv(tvs_df, path = "J:/Research/TVData2.csv")                 
 
